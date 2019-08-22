@@ -3,3 +3,5 @@ ruby '2.6.3'
 
 gem 'puma'
 gem 'sinatra'
+gem 'dotenv'
+gem 'pry'
