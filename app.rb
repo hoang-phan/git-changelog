@@ -9,9 +9,9 @@ post '/payload' do
   pull_request = payload['pull_request']
   release = payload['release']
 
-  p pull_request
-
-  if payload['action'] == 'closed' && pull_request && pull_request['merged']
+  if payload['action'] == 'closed' && pull_request &&
+      pull_request['merged'] && pull_request['base']['ref'] == 'master' &&
+      pull_request['labels'].none? { |label| label['name'] == 'skip_changelog' }
     update_changelog("* #{pull_request['title']} ##{pull_request['number']}")
     { success: true }.to_json
   elsif payload['action'] == 'published' && release
