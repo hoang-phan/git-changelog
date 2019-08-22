@@ -9,7 +9,7 @@ post '/payload' do
   payload = JSON.parse(request.body.read)
 
   pull_request = payload['pull_request']
-  if payload['action'] == 'closed' && pull_request['merged']
+  if payload['action'] == 'closed'
     contents = Github::Client::Repos::Contents.new(login: ENV['GITHUB_USERNAME'], password: ENV['GITHUB_PASSWORD'])
     file = contents.find(ENV['GITHUB_ORGANIZATION'], ENV['GITHUB_REPO'], 'CHANGELOG.md')
     new_content = "#{pull_request['title']} ##{pull_request['number']}.\r\n#{file.content}"
