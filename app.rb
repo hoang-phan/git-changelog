@@ -15,7 +15,7 @@ post '/payload' do
     update_changelog("* #{pull_request['title']} ##{pull_request['number']}")
     { success: true }.to_json
   elsif payload['action'] == 'published' && release
-    update_changelog("# Version #{release['name']} (#{Time.parse(release['created_at']).strftime('%Y-%m-%d')})")
+    update_changelog("\r\n# Version #{release['name']} (#{Time.parse(release['created_at']).strftime('%Y-%m-%d')})\r\n")
     { success: true }.to_json
   else
     { success: false }.to_json
