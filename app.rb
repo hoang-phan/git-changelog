@@ -11,8 +11,8 @@ post '/payload' do
   if payload['action'] == 'closed' && pull_request['merged']
     contents = Github::Client::Repos::Contents.new(login: ENV['GITHUB_USERNAME'], password: ENV['GITHUB_PASSWORD'])
     file = contents.find(ENV['GITHUB_ORGANIZATION'], ENV['GITHUB_REPO'], 'CHANGELOG.md')
-    file_content = HTTParty.get(file.download_url)
-    new_content = "#{pull_request['title']} ##{pull_request['number']}.\r\n#{file_content}"
+    file_content = HTTParty.get(file.download_url, basic_auth: { username: ENV['GITHUB_USERNAME'], password: ENV['GITHUB_PASSWORD'] })
+    new_content = "#{pull_request['title']} ##{pull_request['number']}.\r\n#{file_content.to_s}"
     contents.update(ENV['GITHUB_ORGANIZATION'], ENV['GITHUB_REPO'], 'CHANGELOG.md',
                     path: 'CHANGELOG.md',
                     message: 'Update CHANGELOG',
