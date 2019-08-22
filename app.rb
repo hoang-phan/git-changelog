@@ -1,20 +1,19 @@
 require 'sinatra'
 require 'json'
-require 'dotenv/load'
-require 'pry'
 require 'github_api'
+require 'httparty'
 
 post '/payload' do
   content_type :json
   payload = JSON.parse(request.body.read)
 
   pull_request = payload['pull_request']
-  if payload['action'] == 'closed'
+  if payload['action'] == 'closed' && pull_request['merged']
     contents = Github::Client::Repos::Contents.new(login: ENV['GITHUB_USERNAME'], password: ENV['GITHUB_PASSWORD'])
     file = contents.find(ENV['GITHUB_ORGANIZATION'], ENV['GITHUB_REPO'], 'CHANGELOG.md')
-    new_content = "#{pull_request['title']} ##{pull_request['number']}.\r\n#{file.content}"
-    binding.pry
-    contents.update('conversation', 'tc-ops',
+    file_content = HTTParty.get(file.download_url)
+    new_content = "#{pull_request['title']} ##{pull_request['number']}.\r\n#{file_content}"
+    contents.update(ENV['GITHUB_ORGANIZATION'], ENV['GITHUB_REPO'], 'CHANGELOG.md',
                     path: 'CHANGELOG.md',
                     message: 'Update CHANGELOG',
                     content: new_content,
