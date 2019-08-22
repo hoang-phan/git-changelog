@@ -1,3 +1,6 @@
+
+# Version 1.1 (2019-08-22)
+.
 * [T7] Changelog format #18.
 * [T5] A bit change #16.
 * [T2] render json on success #13.
