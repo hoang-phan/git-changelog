@@ -1,2 +1,2 @@
-[T1] Fix #12.
+[T2] render json on success #13.
 [T0] Cleanup #10.
