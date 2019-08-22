@@ -18,5 +18,7 @@ post '/payload' do
                     message: 'Update CHANGELOG',
                     content: new_content,
                     sha: file.sha)
+    { success: true }.to_json
   end
+  { success: false }.to_json
 end
