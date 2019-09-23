@@ -11,10 +11,11 @@ post '/payload' do
 
   if payload['action'] == 'closed' && pull_request &&
       pull_request['merged'] && pull_request['base']['ref'] == 'master' &&
+      pull_request['base']['repo']['full_name'] == "#{ENV['GITHUB_ORGANIZATION']}/#{ENV['GITHUB_REPO']}" &&
       pull_request['labels'].none? { |label| label['name'] == 'skip_changelog' }
     update_changelog("* #{pull_request['title']} ##{pull_request['number']}")
     { success: true }.to_json
-  elsif payload['action'] == 'published' && release
+  elsif payload['action'] == 'published' && release && payload['repository']['full_name'] == "#{ENV['GITHUB_ORGANIZATION']}/#{ENV['GITHUB_REPO']}"
     update_changelog("\r\n# Version #{release['name']} (#{Time.parse(release['created_at']).strftime('%Y-%m-%d')})\n")
     { success: true }.to_json
   else
