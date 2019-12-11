@@ -1,4 +1,6 @@
 
+# Version 1.2 (2019-12-11)
+
 # Version 1.1 (2019-08-22)
 .
 * [T7] Changelog format #18.
